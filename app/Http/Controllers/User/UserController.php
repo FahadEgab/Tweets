@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
+use App\Models\Tweet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -54,7 +55,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('profile');
+        $user = User::get()->find($id);
+        $tweets = Tweet::with('user')->get()->where('user_id',$id);
+        return view('profile',compact('user','tweets'));
     }
 
     /**
@@ -66,7 +69,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       $user = User::find($id);
+        $user ->update([
+            'name' => $request ->name,
+            'email' => $request ->email,
+            'password' =>  Hash::make($request ->password),
+        ]);
+        return route('User.edit',($id));
     }
 
     /**

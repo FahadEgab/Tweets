@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Tweets;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TweetRequest;
+use App\Models\Tweet;
 use Illuminate\Http\Request;
 
 class TweetsController extends Controller
@@ -14,7 +16,8 @@ class TweetsController extends Controller
      */
     public function index()
     {
-        return view('Index');
+        $tweets = Tweet::with('user')->get();
+        return view('Index',compact('tweets'));
     }
 
     /**
@@ -23,9 +26,14 @@ class TweetsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TweetRequest $request)
     {
 
+      Tweet::create([
+         'content' => $request ->content,
+         'user_id' => session()->get('Id')
+      ]);
+      return redirect()->route('Tweets.index');
     }
 
     /**
@@ -70,6 +78,9 @@ class TweetsController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $tweet=Tweet::find($id);
+            $tweet->delete();
+        return redirect()->route('User.edit',(session()->get('Id')));
     }
 }

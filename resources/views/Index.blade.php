@@ -33,16 +33,21 @@
             <div class="col-md-6">
 
                 <!--border-primary-->
-                <form method="POST" class="card">
+                <form method="POST" action="{{route('Tweets.store')}}" class="card">
+                    @csrf
                     <div class="card-header">
                         <label for="exampleFormControlTextarea1" class="form-label">إنشاء تغريدة</label>
 
                     </div>
                     <div class="mb-3" style="padding: 1%;">
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea name="content" value="{{old('content')}}" class="form-control" id="exampleFormControlTextarea1" rows="3">
+
+                        </textarea>
+                       @error('content')
                         <small class="form-text text-danger">
-                            عدد الاحرف اقل من 200
+                            {{$message}}
                         </small>
+                        @enderror
                     </div>
                     <div class="d-flex me-auto" style="padding: 1%;">
                         <button href="#" type="submit" class="btn btn-outline-primary" style="float: left;">إرسال</button>
@@ -65,19 +70,24 @@
             </div>
 
             {{--Section database--}}
-
+@foreach($tweets as $tweet)
             <div class="col-md-3"></div>
 
             <div class="col-md-6" style="margin-top: 2vh;">
                 <div class="card">
                     <!--border-primary-->
                     <div class="card-header">
-                        <img src="Capture.PNG" style="float: right;" class="avatar" height="40" width="40" alt="pic">
-                        <h5 style="margin-top: 1.5vh;font-weight: bold;">Name
+                        @if($tweet->user->photo ==null)
+                        <img src="https://www.hayalanka.com/wp-content/uploads/2017/07/avtar-image.jpg" style="float: right;" class="avatar" height="40" width="40" alt="pic">
+                        @else
+                            <img src="{{$tweet->user->photo}}" style="float: right;" class="avatar" height="40" width="40" alt="pic">
+
+                        @endif
+                        <h5 style="margin-top: 1.5vh;font-weight: bold;">{{$tweet->user->name}}
                         </h5>
                     </div>
                     <p style="padding: 1%;">
-                        Content
+                        {{$tweet->content}}
                     </p>
                     <div class="d-flex me-auto" style="padding: 1%;">
                         <a href="#" class="btn btn-outline-primary" style="float: left;">عرض التغريدة</a>
@@ -87,7 +97,7 @@
             </div>
 
             <div class="col-md-3"></div>
-
+            @endforeach
         </div>
 
         @if(session()->exists('Id')==false)
