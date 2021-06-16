@@ -25,7 +25,7 @@ Route::group(['namespace'=>'User','prefix'=>'user'],function (){
 Route::group(['namespace'=>'Tweets','prefix'=>'Tweets'],function (){
 
     Route::resource('Tweets',TweetsController::class);
+    Route::post('showHash','TweetsController@showHash')->name('Tweets.showHashTag');
 
 });
-
 

@@ -35,8 +35,10 @@
                     </li>
                    @endif
                 </ul>
-                <form class="d-flex" style="margin-right:20%; width: 30%;">
-                    <input class="form-control me-2" type="search" placeholder="اكتب الهاشتاق" aria-label="Search">
+                <form class="d-flex" action="{{route('Tweets.showHashTag')}}" method="post" style="margin-right:20%; width: 30%;">
+                    @csrf
+                    @method('POST')
+                    <input class="form-control me-2" type="search" name="hashtag" placeholder="اكتب الهاشتاق" aria-label="Search">
                     <button class="btn btn-outline-primary" type="submit">بحث</button>
                 </form>
                 <form class="d-flex me-auto">
